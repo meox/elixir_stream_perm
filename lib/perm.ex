@@ -18,6 +18,11 @@ defmodule Perm do
     end
   end
 
+  # SELCTIONS
+  #
+  # selections []     = []
+  # selections (x:xs) = (x, xs) : [ (y, x:ys) | (y, ys) <- selections xs ]
+
   def selections([]), do: []
 
   def selections([x | xs]) do
