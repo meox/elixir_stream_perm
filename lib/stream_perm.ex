@@ -1,9 +1,20 @@
 defmodule StreamPerm do
+  @doc """
+  Create a stream permutation.
+
+  ##  Examples
+
+    iex> StreamPerm.perm([1, 2]) |> Enum.to_list()
+    [[1, 2], [2, 1]]
+
+  """
   def perm(xs) do
     Stream.resource(
       fn -> {:start, Enum.sort(xs)} end,
       fn
-        {:start, xs} -> {[xs], xs}
+        {:start, xs} ->
+          {[xs], xs}
+
         xs ->
           case next_perm(xs) do
             {true, v} -> {[v], v}
