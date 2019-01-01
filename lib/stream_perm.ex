@@ -1,12 +1,20 @@
 defmodule StreamPerm do
-  @doc """
+  @doc ~S"""
   Create a stream permutation.
 
   ##  Examples
 
     iex> StreamPerm.perm([1, 2]) |> Enum.to_list()
     [[1, 2], [2, 1]]
-
+    iex> StreamPerm.perm(["A", "B", "C"]) |> Enum.to_list()
+    [
+      ["A", "B", "C"],
+      ["A", "C", "B"],
+      ["B", "A", "C"],
+      ["B", "C", "A"],
+      ["C", "A", "B"],
+      ["C", "B", "A"]
+    ]
   """
   def perm(xs) do
     Stream.resource(
@@ -28,13 +36,13 @@ defmodule StreamPerm do
   ##### PRIVATE #####
 
   defp next_perm(xs) do
-    j = Enum.count(xs) - 1
-    i = find_max_index(xs, j)
+    last_idx = Enum.count(xs) - 1
+    i = find_max_index(xs, last_idx)
 
     if i == false do
       {false, []}
     else
-      j = swap_index(xs, i, j)
+      j = get_swap_index(xs, i, last_idx)
 
       p =
         xs
@@ -57,9 +65,9 @@ defmodule StreamPerm do
     end
   end
 
-  defp swap_index(xs, i, j) do
+  defp get_swap_index(xs, i, j) do
     if j > i && Enum.at(xs, j) <= Enum.at(xs, i - 1) do
-      swap_index(xs, i, j - 1)
+      get_swap_index(xs, i, j - 1)
     else
       j
     end
